@@ -1,146 +1,71 @@
-
-import { useState } from 'react';
 import Layout from '@/components/layout/Layout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import VirtualTourFrame from '@/components/VirtualTourFrame';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+
+const tours = [
+  { title: 'Тур 1', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BF%D0%B8%D1%86%D1%83%D0%BD%D0%B4%D0%B0-%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5/' },
+  { title: 'Тур 2', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BE%D0%B7%D0%B5%D1%80%D0%BE-%D1%80%D0%B8%D1%86%D0%B0-%D1%81-%D0%B2%D1%8B/' },
+  { title: 'Тур 3', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9-%D0%B0%D1%84%D0%BE%D0%BD-%D1%81-%D0%B2%D1%8B/' },
+  { title: 'Тур 4', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9-%D0%B0%D1%84%D0%BE%D0%BD-%D0%B4%D0%B0%D1%87/' },
+  { title: 'Тур 5', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BF%D0%B8%D1%86%D1%83%D0%BD%D0%B4%D1%81%D0%BA%D0%B8%D0%B9-%D1%85%D1%80%D0%B0/' },
+  { title: 'Тур 6', src: 'https://go-abxazia.ru/%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%BD%D0%B0%D1%8F-%D0%B2%D0%B5%D0%B1%D0%BA%D0%B0%D0%BC%D0%B5%D1%80%D0%B0-%D0%BD%D0%B0-%D0%BE%D0%B7%D0%B5%D1%80%D0%B5-%D1%80%D0%B8%D1%86%D0%B0/' },
+  { title: 'Тур 7', src: 'https://go-abxazia.ru/%D0%B2%D0%B5%D0%B1%D0%BA%D0%B0%D0%BC%D0%B5%D1%80%D0%B0-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9-%D0%B0%D1%84%D0%BE%D0%BD-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0/' },
+  { title: 'Тур 8', src: 'https://truevirtualtours.com/tour/picunda' },
+  { title: 'Тур 9', src: 'https://truevirtualtours.com/tour/daca-stalina-v-abhazii' },
+  { title: 'Тур 10', src: 'https://truevirtualtours.com/tours?tagged=abhazia' },
+  { title: 'Тур 11', src: 'https://www.360cities.net/image/tourist-camp-in-the-kodori-gorge-abkhazia' },
+  { title: 'Тур 12', src: 'https://www.360cities.net/de/image/8199-abh-ricca-1' },
+  { title: 'Тур 13', src: 'https://www.360cities.net/ru/image/novy-afon-abhaziya' },
+  { title: 'Тур 14', src: 'https://www.360cities.net/it/image/8000-abh-opk2-mol' },
+  { title: 'Тур 15', src: 'https://www.360cities.net/de/image/lake-amtkel-abkhazia' },
+  { title: 'Тур 16', src: 'https://www.360cities.net/it/image/7929-abh-opk-beach-1' },
+  { title: 'Тур 17', src: 'https://www.360cities.net/image/view-from-the-square-of-an-abandoned-railway-station-new-athos-abkhazia' },
+  { title: 'Тур 18', src: 'https://www.360cities.net/ru/image/abkhazia-new-athos-fortress-church-2010' },
+  { title: 'Тур 19', src: 'https://www.360cities.net/nl/image/6076-abh-kavkaz' },
+  { title: 'Тур 20', src: 'https://www.360cities.net/image/8931-abh-suh-atrium-1' },
+  { title: 'Тур 21', src: 'https://www.360cities.net/st/image/abkhazia-new-athos-monastery-2-2010' },
+  { title: 'Тур 22', src: 'https://otdich-v-gagrach.ru/abhaziya-otdyh-panoramy/' },
+  { title: 'Тур 23', src: 'https://dolphin-picunda.com/%D0%B8%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8F-%D0%B0%D0%B1%D1%85%D0%B0%D0%B7%D0%B8%D0%B8/' },
+  { title: 'Тур 24', src: 'https://sputnik-abkhazia.ru/panorama/' },
+  { title: 'Тур 25', src: 'https://abkhazworld.com/aw/blogs/1642-ritsa-auadhara-national-park-abkhazia' },
+  { title: 'Тур 26', src: 'https://www.youtube.com/watch?v=-N5KKvmMs_c' },
+  { title: 'Тур 27', src: 'https://www.reddit.com/r/Abkhazia/comments/1fmmxw8/video_of_the_coastal_area_of_abkhazias_capital/' },
+  { title: 'Тур 28', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D0%B0%D1%8F-%D0%BF%D0%B8%D1%86%D1%83%D0%BD%D0%B4%D0%B0-%D0%BD%D0%B0%D0%B1%D0%B5%D1%80%D0%B5/#variant28' },
+  { title: 'Тур 29', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BE%D0%B7%D0%B5%D1%80%D0%BE-%D1%80%D0%B8%D1%86%D0%B0-%D1%81-%D0%B2%D1%8B/#variant29' },
+  { title: 'Тур 30', src: 'https://go-abxazia.ru/%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F-3d-%D0%BF%D0%B0%D0%BD%D0%BE%D1%80%D0%B0%D0%BC%D0%B0-%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9-%D0%B0%D1%84%D0%BE%D0%BD-%D1%81-%D0%B2%D1%8B/#variant30' }
+];
 
 const Portfolio = () => {
-  const [activeTab, setActiveTab] = useState("sukhum");
-
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900">Портфолио</h1>
-          <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
-            Примеры виртуальных туров по различным локациям Республики Абхазия
-          </p>
-          <div className="mt-2 h-1 w-20 bg-blue-600 mx-auto"></div>
-        </div>
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold mb-6">Портфолио — виртуальные туры по Абхазии</h1>
+          <p className="mb-6 text-muted-foreground">Демонстрация реальных панорам и туров по разным локациям Абхазии. Нажмите «Открыть» чтобы посмотреть в новой вкладке.</p>
 
-        <Tabs defaultValue="sukhum" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="mb-6 overflow-x-auto">
-            <TabsList className="h-auto p-1 flex w-full justify-start sm:justify-center">
-              <TabsTrigger value="sukhum" className="text-sm sm:text-base py-2 px-4">Сухум</TabsTrigger>
-              <TabsTrigger value="gagra" className="text-sm sm:text-base py-2 px-4">Гагра</TabsTrigger>
-              <TabsTrigger value="pitsunda" className="text-sm sm:text-base py-2 px-4">Пицунда</TabsTrigger>
-              <TabsTrigger value="new-athos" className="text-sm sm:text-base py-2 px-4">Новый Афон</TabsTrigger>
-            </TabsList>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tours.map((t, idx) => (
+              <Card key={idx} className="overflow-hidden">
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold mb-2">{t.title}</h3>
+                  <p className="text-sm mb-4 break-words">{t.src}</p>
+                </div>
+                <div className="w-full">
+                  <VirtualTourFrame src={t.src} title={t.title} height={280} />
+                </div>
+                <div className="p-4 flex justify-between items-center">
+                  <a href={t.src} target="_blank" rel="noreferrer"><Button>Открыть</Button></a>
+                  <a href={t.src} target="_blank" rel="noreferrer" className="text-sm underline">Открыть в новой вкладке</a>
+                </div>
+              </Card>
+            ))}
           </div>
-
-          <TabsContent value="sukhum" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-2xl font-bold mb-4">Виртуальный тур по Сухуму</h2>
-              <p className="text-gray-700 mb-6">
-                Сухум — столица Республики Абхазия, город с древней историей, расположенный на побережье Черного моря. Виртуальный тур позволяет увидеть знаменитую Сухумскую бухту и набережную.
-              </p>
-              <div className="bg-gray-100 p-4 rounded-lg mb-6">
-                <VirtualTourFrame
-                  src="https://yandex.com/map-widget/v1/?l=stv%2Csta&ll=41.057345%2C42.982470&mode=search&oid=194863417396&ol=biz&panorama%5Bdirection%5D=66.838510%2C3.861791&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=41.056935%2C42.983444&panorama%5Bspan%5D=110.729797%2C60.000000&z=16.68"
-                  title="Сухумская бухта"
-                  height={500}
-                />
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Особенности локации:</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li>Исторический центр города с колониальной архитектурой</li>
-                  <li>Живописная набережная Махаджиров</li>
-                  <li>Ботанический сад с редкими видами растений</li>
-                  <li>Абхазский драматический театр</li>
-                </ul>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="gagra" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-2xl font-bold mb-4">Виртуальный тур по Гагре</h2>
-              <p className="text-gray-700 mb-6">
-                Гагра — один из самых популярных курортов Абхазии, известный своими пляжами и живописными горными пейзажами. Виртуальный тур позволяет увидеть город с высоты птичьего полета.
-              </p>
-              <div className="bg-gray-100 p-4 rounded-lg mb-6">
-                <div style={{position:"relative", overflow:"hidden"}}>
-                  <iframe 
-                    src="https://yandex.com/map-widget/v1/?l=stv%2Csta&ll=40.265122%2C43.277622&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1MzE2ODQ3NhKNAeGDoeGDkOGDpeGDkOGDoOGDl-GDleGDlOGDmuGDnSwg4YOQ4YOk4YOu4YOQ4YOW4YOU4YOX4YOY4YOhIOGDkOGDleGDouGDneGDnOGDneGDm-GDmOGDo-GDoOGDmCDhg6Dhg5Thg6Hhg57hg6Phg5Hhg5rhg5jhg5nhg5AsIOGDkuGDkOGDkuGDoOGDkCIKDWQZIUIVmRctQg%2C%2C&panorama%5Bair%5D=true&panorama%5Bdirection%5D=172.823238%2C-25.100864&panorama%5Bfull%5D=true&panorama%5Bid%5D=1313930909_788325462_23_1719871883&panorama%5Bpoint%5D=40.264833%2C43.285767&panorama%5Bspan%5D=110.729797%2C60.000000&z=14" 
-                    width="560" 
-                    height="500" 
-                    frameBorder="1" 
-                    allowFullScreen={true} 
-                    style={{position:"relative", width: "100%"}}
-                  ></iframe>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Особенности локации:</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li>Живописное побережье с галечными пляжами</li>
-                  <li>Гагрская колоннада — символ города</li>
-                  <li>Замок принца Ольденбургского</li>
-                  <li>Красивые панорамные виды на горы и море</li>
-                </ul>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="pitsunda" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-2xl font-bold mb-4">Виртуальный тур по Пицунде</h2>
-              <p className="text-gray-700 mb-6">
-                Пицунда — курортный поселок, знаменитый своими песчаными пляжами и реликтовой сосновой рощей. Виртуальный тур позволяет увидеть красоту этого места с высоты птичьего полета.
-              </p>
-              <div className="bg-gray-100 p-4 rounded-lg mb-6">
-                <div style={{position:"relative", overflow:"hidden"}}>
-                  <iframe 
-                    src="https://yandex.com/map-widget/v1/?l=stv%2Csta&ll=40.361646%2C43.169139&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1MzE2ODQ3NhKNAeGDoeGDkOGDpeGDkOGDoOGDl-GDleGDlOGDmuGDnSwg4YOQ4YOk4YOu4YOQ4YOW4YOU4YOX4YOY4YOhIOGDkOGDleGDouGDneGDnOGDneGDm-GDmOGDo-GDoOGDmCDhg6Dhg5Thg6Hhg57hg6Phg5Hhg5rhg5jhg5nhg5AsIOGDkuGDkOGDkuGDoOGDkCIKDWQZIUIVmRctQg%2C%2C&panorama%5Bair%5D=true&panorama%5Bdirection%5D=168.087451%2C-70.416594&panorama%5Bfull%5D=true&panorama%5Bid%5D=1314570710_789240724_23_1719651521&panorama%5Bpoint%5D=40.372088%2C43.173574&panorama%5Bspan%5D=110.729797%2C60.000000&z=14.91" 
-                    width="560" 
-                    height="500" 
-                    frameBorder="1" 
-                    allowFullScreen={true} 
-                    style={{position:"relative", width: "100%"}}
-                  ></iframe>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Особенности локации:</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li>Реликтовая сосновая роща</li>
-                  <li>Чистейшие песчаные пляжи</li>
-                  <li>Патриарший собор X века</li>
-                  <li>Живописные виды на море и горы</li>
-                </ul>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="new-athos" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-2xl font-bold mb-4">Виртуальный тур по Новому Афону</h2>
-              <p className="text-gray-700 mb-6">
-                Новый Афон — город, известный своими историческими и природными достопримечательностями, включая знаменитый Новоафонский монастырь и уникальную пещеру.
-              </p>
-              <div className="bg-gray-100 p-4 rounded-lg mb-6">
-                <VirtualTourFrame
-                  src="https://yandex.com/map-widget/v1/?l=stv%2Csta&ll=40.812787%2C43.098081&panorama%5Bdirection%5D=44.595733%2C5.419071&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=40.812038%2C43.097903&panorama%5Bspan%5D=113.507965%2C60.000000&z=17"
-                  title="Новоафонский монастырь"
-                  height={500}
-                />
-              </div>
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Особенности локации:</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-2">
-                  <li>Новоафонский монастырь Святого Пантелеймона</li>
-                  <li>Новоафонская пещера — одна из самых больших в мире</li>
-                  <li>Водопад на реке Псырцха</li>
-                  <li>Руины древней крепости Анакопия</li>
-                </ul>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+        </div>
+      </section>
     </Layout>
   );
-};
+}
 
 export default Portfolio;

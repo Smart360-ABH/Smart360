@@ -12,8 +12,6 @@ const Navbar = () => {
     { name: 'Портфолио', href: '/portfolio' },
     { name: 'О нас', href: '/about' },
     { name: 'Контакты', href: '/contact' },
-  
-    { name: 'Примеры', href: '/examples' },
   ];
 
   return (
