@@ -9,10 +9,6 @@ import Portfolio from "./pages/Portfolio";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-import ProjectParadiz from "./pages/projects/ProjectParadiz";
-import ProjectUtrish from "./pages/projects/ProjectUtrish";
-import ProjectRedArena from "./pages/projects/ProjectRedArena";
-
 
 const queryClient = new QueryClient();
 
