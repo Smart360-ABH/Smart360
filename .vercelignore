@@ -1,0 +1,7 @@
+# Ignore bun lockfile to avoid Vercel selecting Bun
+bun.lockb
+# ignore local node_modules and logs
+node_modules
+npm-debug.log
+yarn-error.log
+.DS_Store
